@@ -1,3 +1,2 @@
 yt_dlp
-savify==2.3.3
 git+https://github.com/stschake/savify@feature/use-yt-dlp#egg=savify 
