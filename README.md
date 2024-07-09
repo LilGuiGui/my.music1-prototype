@@ -1,2 +1,3 @@
 # my.music1-prototype
-uhm yeah
+
+Script For Youtube Music and Spotify ( savify bugged )
