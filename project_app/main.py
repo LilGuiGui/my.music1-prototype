@@ -26,27 +26,31 @@ def download_youtube(url, output_path):
     with ytd.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
+
 def download_spotify(url, output_path):
-        #moji app btw you can access if you have 
-        client_credentials_manager = SpotifyClientCredentials(
-            client_id="c2143c4a0d2243858b590723a4f8ddfd",
-            client_secret="655b0c291f8048e3aad2b268a3a88bb1"
-        )
-        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    #Me (moji/lilgui) personal spotify code link
+    client_id = "c2143c4a0d2243858b590723a4f8ddfd"
+    client_secret = "69b7c03ddbdb4f99b688a138608ff2d8"
+    
+    client_credentials_manager = SpotifyClientCredentials(
+        client_id=client_id,
+        client_secret=client_secret
+    )
 
-        track_info = sp.track(url)
-        print(f"Successfully retrieved info for track: {track_info['name']}")
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-        s = Savify(
-            api_credentials=("c2143c4a0d2243858b590723a4f8ddfd", "655b0c291f8048e3aad2b268a3a88bb1"),
-            quality=Quality.BEST,
-            download_format=Format.MP3,
-            path_holder=PathHolder(downloads_path=output_path),  
-            group='%artist%/%album%',
-            skip_cover_art=False,
-        )
-        s.download(url)
-        
+    track_info = sp.track(url)
+    print(f"Successfully retrieved info for track: {track_info['name']}")
+
+    s = Savify(
+        api_credentials=(client_id, client_secret),
+        quality=Quality.BEST,
+        download_format=Format.MP3,
+        path_holder=PathHolder(downloads_path=output_path),  
+        skip_cover_art=False,
+    )
+    s.download(url)
+
 def main():
     if not path:
         logging.error("Failed to create or access the directory.")
