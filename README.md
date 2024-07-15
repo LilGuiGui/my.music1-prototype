@@ -10,5 +10,4 @@ if you dont have pip, check
 1. https://www.python.org/downloads/
 2. https://pypi.org/project/pip/#files
 
-
-![doneanddusted](https://github.com/LilGuiGui/my.music1-prototype/assets/175070880/f3b4a251-29dc-47a8-b2cd-fbef49e95445)
+![WhatsApp Image 2024-07-16 at 12 11 52 AM](https://github.com/user-attachments/assets/712c5ea5-56ac-40ff-84f8-f87aff871924)
