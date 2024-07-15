@@ -2,7 +2,7 @@ import os
 
 def check_dir():
     home_dir = os.path.expanduser("~")
-    directory = "saved_song"
+    directory = "downloaded_song"
     path = os.path.join(home_dir, "Music", directory)
 
     try:
