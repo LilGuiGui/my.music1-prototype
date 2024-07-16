@@ -1,2 +1,0 @@
-yt_dlp
-git+https://github.com/stschake/savify@feature/use-yt-dlp#egg=savify 
