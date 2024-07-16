@@ -73,9 +73,9 @@ def getmy():
                         song_number = int(input("Enter the number of the song you want to download: "))
                         if 1 <= song_number <= len(recommendations):
                             selected_song = recommendations[song_number - 1]
-                            print("----------------------------------------")
+                            print("-----------------------------------------")
                             print(f"Selected\n>> {selected_song['name']} by {selected_song['artist']}")
-                            print("----------------------------------------")
+                            print("-----------------------------------------")
                             return selected_song['url']
                         else:
                             print("Invalid Choice")
