@@ -3,9 +3,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
 def read_spotify_credentials():
-    script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))         # absolute path cuz wtf is 
-    credentials_path = os.path.join(script_dir,"config", "credentials.txt")  # FileNotFoundError: [Errno 2] No such file or directory: 
-                                                                    # RAAAAAAAAHHHHHHHHHHHHHH
+    script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))    # absolute path cuz wtf is 
+    credentials_path = os.path.join(script_dir,"config", "credentials.txt")     # FileNotFoundError: [Errno 2] No such file or directory: 
+                                                                                # RAAAAAAAAHHHHHHHHHHHHHH
     with open(credentials_path, "r") as f:
         client_id = f.readline().strip()
         client_secret = f.readline().strip()
