@@ -1,4 +1,4 @@
-If app HAS gone shi,
+If app HAS gone shit,
 
 try first changing credentials.txt accordingly
 go https://developer.spotify.com/dashboard
