@@ -3,10 +3,10 @@ import os
 import yt_dlp as ytd
 
 from savify import Savify
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 from savify.types import Quality, Format
 from savify.utils import PathHolder
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 from makedir import check_dir
 from credentials import read_spotify_credentials
