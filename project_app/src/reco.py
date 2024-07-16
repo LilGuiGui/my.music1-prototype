@@ -86,4 +86,5 @@ def getmy():
             find_closest_match(genre, user_input)
 
 #Credits
-#1. Thank you Abel, @asico for helping me
+#1. Thank you Abel, @asico for helping finding and fouck out for me 
+#2. Thank you TobyAdd server members
