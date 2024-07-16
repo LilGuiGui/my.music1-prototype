@@ -15,4 +15,3 @@ def check_dir():
 
 #Credits
 #1. https://www.geeksforgeeks.org/python-os-path-expanduser-method/
-#2. 
