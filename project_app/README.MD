@@ -1,7 +1,8 @@
-If app HAS gone shit,
+If app HAS gone shi,
 
-try first changing credentials.txt accordingly
-go https://developer.spotify.com/dashboard
+try first changing config/credentials.txt according your own devapp
+go to https://developer.spotify.com/dashboard
+
         for redirect url, use your common locals
         e.g https://localhost:8080
 
@@ -11,4 +12,4 @@ go https://developer.spotify.com/dashboard
 
 Run-it-Back.png
 
-consider your path in makedir.py
+consider your custom path in makedir.py
