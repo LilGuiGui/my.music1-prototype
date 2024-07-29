@@ -1,81 +1,70 @@
 import os
-
 import yt_dlp as ytd
-
 from savify import Savify
-from savify.types import Quality, Format
-from savify.utils import PathHolder
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-
+from savify.types import Quality, Format
+from savify.utils import PathHolder
 from makedir import check_dir
 from credentials import read_spotify_credentials
 
-def download_youtube(url, output_path):
-    ydl_opts = {                                                    #kwargs may differ, sesuai kebutuhan
+def download_youtube(url, output_path, progress_callback=None):
+    ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
-            'preferredquality': '192',
         }],
         'outtmpl': os.path.join(output_path, '%(title)s.%(ext)s'),
+        'progress_hooks': [lambda d: youtube_progress_hook(d, progress_callback)] if progress_callback else [],
     }
     
     with ytd.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
-def download_spotify(url, output_path):
+def youtube_progress_hook(d, callback):
+    if d['status'] == 'downloading':
+        try:
+            percent = float(d.get('_percent_str', '0%').replace('%', ''))
+        except ValueError:
+            percent = 0
+        callback(percent, f"Downloading: {d.get('_percent_str', '0%')}")
+    elif d['status'] == 'finished':
+        callback(100, "Download finished, now converting...")
 
-    client_id, client_secret = read_spotify_credentials()            # for template, use my Moji/Lilgui personal API                                                                
+def download_spotify(url, output_path, progress_callback=None):
+    client_id, client_secret = read_spotify_credentials()
     client_credentials_manager = SpotifyClientCredentials(
         client_id=client_id,
         client_secret=client_secret
     )
     
-    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager) #CHECK THIS PART
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
     track_info = sp.track(url)
-    print(f"Successfully retrieved info for track: {track_info['name']}")
+    if progress_callback:
+        progress_callback(0, f"Downloading: {track_info['name']}")
 
     s = Savify(
         api_credentials=(client_id, client_secret),
         quality=Quality.BEST,
         download_format=Format.MP3,
-        path_holder=PathHolder(downloads_path=output_path),  
+        path_holder=PathHolder(downloads_path=output_path),
         skip_cover_art=False,
     )
     s.download(url)
+    
+    if progress_callback:
+        progress_callback(100, "Download completed")
 
-def downloadinterface():
-
+def download_interface(url, platform, progress_callback=None):
     path = check_dir()
     if not path:
-        print("Cannot access dir")
-        return
+        raise Exception("Cannot access download directory")
 
-    while True:
-        print("Platform")
-        print("1. YouTube")
-        print("2. Spotify")
-        
-        choice = input("> ")
-        
-        url = input("Enter the URL of the song or playlist: ")
-        
-        if choice == '1':
-            try:
-                download_youtube(url, path)
-                print("YouTube Download Success.")
-            except Exception as err:
-                print(f"Error: {err}")
-        elif choice == '2':
-            try:
-                download_spotify(url, path)
-                print("Spotify Download Success.")
-            except Exception as err:
-                print(f"Error: {err}")
-        else:
-            print("Invalid choice. Please try again.")
-
-
+    if platform == "YouTube":
+        download_youtube(url, path, progress_callback)
+    elif platform == "Spotify":
+        download_spotify(url, path, progress_callback)
+    else:
+        raise ValueError("Invalid platform. Choose 'YouTube' or 'Spotify'.")

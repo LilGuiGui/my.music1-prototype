@@ -27,10 +27,9 @@ def find_closest_match(genre, user_input):
 
     user_input = user_input.lower()
     match = difflib.get_close_matches(user_input, genre, n=5, cutoff=0.3) 
-    print(f'Do you mean {match}?')
-
-def get_spotify_recommendations(genre):
-
+    return match
+    
+def get_spotify_recommendations_based_on_genre(genre):
     client_id, client_secret = read_spotify_credentials()                                                                          
     client_credentials_manager = SpotifyClientCredentials(
         client_id=client_id,
@@ -44,47 +43,41 @@ def get_spotify_recommendations(genre):
     {
         'name': track['name'],
         'artist': track['artists'][0]['name'],
-        'url': track['external_urls']['spotify']
+        'url': track['external_urls']['spotify'],
+        'preview_url': track['preview_url'],
+        'album_cover': track['album']['images'][0]['url'] if track['album']['images'] else None
     }
     for track in listsong['tracks']]
-    return recommendations  
+    return recommendations
 
-def getmy():
-    genre = load_genre()
+def get_spotify_recommendations_based_on_artist(artist_name):
+    client_id, client_secret = read_spotify_credentials()
+    client_credentials_manager = SpotifyClientCredentials(
+        client_id=client_id,
+        client_secret=client_secret
+    )
     
-    while True:
-        print("Enter a genre")
-        user_input = input("> ")
-        user_input = user_input.lower()
-        if user_input in genre:
-            print(f'\nYou Choose {user_input}')
-            recommendations = get_spotify_recommendations(user_input)
-            
-            print("\n10 Song Recomendations:")
-            for i, track in enumerate(recommendations, 1):
-                print(f"{i}. {track['name']} by {track['artist']}")
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-            print("\nDo you want to download a song from this list? (yes/no): ")
-            download_choice = input("> ")
-            download_choice = download_choice.lower()
+    # Search for the artist
+    results = sp.search(q='artist:' + artist_name, type='artist')
+    if not results['artists']['items']:
+        return []  # Return empty list if artist not found
 
-            if download_choice == 'yes' or download_choice == 'y':
-                while True:
-                        song_number = int(input("Enter the number of the song you want to download: "))
-                        if 1 <= song_number <= len(recommendations):
-                            selected_song = recommendations[song_number - 1]
-                            print("-----------------------------------------")
-                            print(f"Selected\n>> {selected_song['name']} by {selected_song['artist']}")
-                            print("-----------------------------------------")
-                            return selected_song['url']
-                        else:
-                            print("Invalid Choice")
-            else:
-                print("No song selected for download.")
-                return None
-        else:
-            find_closest_match(genre, user_input)
+    artist_id = results['artists']['items'][0]['id']
+
+    # Get recommendations based on artist ID
+    listsong = sp.recommendations(seed_artists=[artist_id], limit=10)
+    recommendations = [
+    {
+        'name': track['name'],
+        'artist': track['artists'][0]['name'],
+        'url': track['external_urls']['spotify'],
+        'preview_url': track['preview_url'],
+        'album_cover': track['album']['images'][0]['url'] if track['album']['images'] else None
+    }
+    for track in listsong['tracks']]
+    return recommendations
 
 #Credits
-#1. Thank you Abel, @asico for helping finding and fouck out for me 
-#2. Thank you TobyAdd server members
+#1. Thank you Abel, @asico for helping me
