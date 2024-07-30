@@ -5,6 +5,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from savify.types import Quality, Format
 from savify.utils import PathHolder
+import ffmpeg
 from makedir import check_dir
 from credentials import read_spotify_credentials
 
@@ -56,15 +57,3 @@ def download_spotify(url, output_path, progress_callback=None):
     
     if progress_callback:
         progress_callback(100, "Download completed")
-
-def download_interface(url, platform, progress_callback=None):
-    path = check_dir()
-    if not path:
-        raise Exception("Cannot access download directory")
-
-    if platform == "YouTube":
-        download_youtube(url, path, progress_callback)
-    elif platform == "Spotify":
-        download_spotify(url, path, progress_callback)
-    else:
-        raise ValueError("Invalid platform. Choose 'YouTube' or 'Spotify'.")
